@@ -1,0 +1,26 @@
+
+# ---- Secrets / env ----
+.env
+*.env
+.env.*
+!.env.example
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Editor / IDE (infra에서도 열 수 있으니 최소만) ----
+.vscode/
+.idea/
+*.iml
+
+# ---- Logs / Temp ----
+*.log
+*.tmp
+*.swp
+
+# ---- Docker / runtime artifacts ----
+**/data/
+**/volumes/
+**/mysql_data/
+**/.terraform/
