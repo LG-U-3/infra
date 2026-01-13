@@ -13,6 +13,11 @@ services:
       - mysql_data:/var/lib/mysql
     command: --innodb-buffer-pool-size=512M
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
 
   redis:
     image: redis:7
@@ -31,8 +36,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
     restart: always
 
   billing-batch:
@@ -45,9 +52,12 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
     restart: always
 
 volumes:
   mysql_data:
+    name: billing-system_mysql_data
