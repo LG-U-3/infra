@@ -1,17 +1,22 @@
+# docker-compose.override.yml (개발 전용)
+# - 컨테이너 재빌드 없이 코드 수정 반영(볼륨 마운트)
+# - DevTools / bootRun 기반 개발 편의
+# - Java 경로/로컬 PATH 설정 없이 컨테이너 JDK로 통일
+
 services:
   admin-web:
-    build: {}
-    image: gradle:8.14.3-jdk17
+    image: eclipse-temurin:17-jdk
     container_name: admin-web
     working_dir: /app
     volumes:
       - ../admin-web:/app
-      - gradle_cache_admin:/home/gradle/.gradle
+      - gradle_cache_admin:/root/.gradle
     env_file:
       - .env
     environment:
       SPRING_PROFILES_ACTIVE: docker
       TZ: Asia/Seoul
+    entrypoint: []
     command: ["bash", "-lc", "./gradlew bootRun --no-daemon"]
     ports:
       - "8080:8080"
@@ -23,18 +28,18 @@ services:
     restart: unless-stopped
 
   billing-batch:
-    build: {}
-    image: gradle:8.14.3-jdk17
+    image: eclipse-temurin:17-jdk
     container_name: billing-batch
     working_dir: /app
     volumes:
       - ../billing-batch:/app
-      - gradle_cache_batch:/home/gradle/.gradle
+      - gradle_cache_batch:/root/.gradle
     env_file:
       - .env
     environment:
       SPRING_PROFILES_ACTIVE: docker
       TZ: Asia/Seoul
+    entrypoint: []
     command: ["bash", "-lc", "./gradlew bootRun --no-daemon"]
     ports:
       - "8090:8090"
