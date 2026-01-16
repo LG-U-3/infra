@@ -1,0 +1,50 @@
+services:
+  admin-web:
+    build: {}
+    image: gradle:8.14.3-jdk17
+    container_name: admin-web
+    working_dir: /app
+    volumes:
+      - ../admin-web:/app
+      - gradle_cache_admin:/home/gradle/.gradle
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      TZ: Asia/Seoul
+    command: ["bash", "-lc", "./gradlew bootRun --no-daemon"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  billing-batch:
+    build: {}
+    image: gradle:8.14.3-jdk17
+    container_name: billing-batch
+    working_dir: /app
+    volumes:
+      - ../billing-batch:/app
+      - gradle_cache_batch:/home/gradle/.gradle
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      TZ: Asia/Seoul
+    command: ["bash", "-lc", "./gradlew bootRun --no-daemon"]
+    ports:
+      - "8090:8090"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  gradle_cache_admin:
+  gradle_cache_batch:
