@@ -24,3 +24,4 @@ Thumbs.db
 **/volumes/
 **/mysql_data/
 **/.terraform/
+dump-data.sql
