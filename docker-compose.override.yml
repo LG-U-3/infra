@@ -5,7 +5,7 @@
 
 services:
   admin-web:
-    image: eclipse-temurin:17-jdk
+    image: eclipse-temurin:17-jdk-jammy
     container_name: admin-web
     working_dir: /app
     volumes:
@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
   billing-batch:
-    image: eclipse-temurin:17-jdk
+    image: eclipse-temurin:17-jdk-jammy
     container_name: billing-batch
     working_dir: /app
     volumes:
