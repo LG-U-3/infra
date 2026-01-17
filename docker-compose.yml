@@ -24,6 +24,8 @@ services:
     container_name: redis
     ports:
       - "16379:6379"
+    volumes:
+      - redis_data:/data
     restart: always
 
   redis-init:
@@ -67,6 +69,21 @@ services:
         condition: service_started
     restart: always
 
+  message-sender:
+    build: ../message-sender
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+
 volumes:
   mysql_data:
     name: billing-system_mysql_data
+  redis_data:
+    name: billing-system_redis_data
