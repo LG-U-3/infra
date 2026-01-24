@@ -11,7 +11,9 @@ services:
       - "13306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-    command: --innodb-buffer-pool-size=512M
+    command:
+      --innodb-buffer-pool-size=512M
+      --default-time-zone=+09:00
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p${MYSQL_ROOT_PASSWORD} --silent"]
